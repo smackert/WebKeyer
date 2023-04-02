@@ -17,13 +17,13 @@ def main():
     request_options = {'verify_ssl': args.verify_ssl, 'include_headers': args.include_headers}
 
     # Set paths
-    if args.input_path:
+    if args.input_file:
         try:
-            input_path = Path(args.input_path)
+            input_file = Path(args.input_file)
         except Exception as e:
             print(f'Invalid input file: {e}')
             sys.exit(1)
-        if not input_path.is_file():
+        if not input_file.is_file():
             print(f'Error: input file does not exist or cannot be read: {e}')
     else:
         sys.exit("Error: Input file is required. Quitting...")
