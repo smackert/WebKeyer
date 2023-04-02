@@ -1,3 +1,4 @@
+import getpass
 import logging
 import encrypt
 import web
@@ -11,7 +12,11 @@ def main():
     if args.verbose:
         logging.basicConfig(level=logging.DEBUG)
 
-    if encrypt:
+    request_options = {'verify_ssl': args.verify_ssl, 'include_headers': args.include_headers}
+
+    # If encryption mode
+    if args.encrypt:
+        logging.debug("Starting in encryption mode")
         # Ask for password and Verify
         while True:
             p = getpass.getpass()
@@ -21,13 +26,10 @@ def main():
                 print("Passwords do not match!")
         
         # Try to get the webpage if a URL is provided
-        webkeyfile = web.get_webpage(url, **request_args)
+        webkeyfile = web.get_webpage(args.url, **request_options)
         if webkeyfile:
             password = p.encode('utf-8') + webkeyfile
         else:
             logging.debug("No web keyfile provided.") 
             password = p.encode('utf-8')   
-        encrypt(password, input_file)
-
-# Generate keyfile
-webkeyfile = web.get_webpage(arg.url, arg.verify_ssl, arg.include_headers)
+        encrypt(p, args.input_file)
