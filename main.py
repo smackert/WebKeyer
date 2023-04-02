@@ -5,6 +5,7 @@ import encrypt
 import web
 from cli.parser import get_parser
 import encrypt
+import decrypt
 from pathlib import Path
 
 def main():
@@ -26,7 +27,7 @@ def main():
         if not input_file.is_file():
             print(f'Error: input file does not exist or cannot be read: {e}')
     else:
-        sys.exit("Error: Input file is required. Quitting...")
+        sys.exit("Error: Input file is required.")
 
     if args.output_path:
         try:
@@ -35,13 +36,14 @@ def main():
             print(f'Invalid output path: {e}')
             sys.exit(1)
     else:
-        logging.debug("No output path provided") 
+        logging.debug("No output path provided, defaulting to input_file.wbkr") 
+        output_path = input_file.with_suffix(input_file.suffix + '.wbkr')
 
     # If encryption mode
     if args.encrypt_mode:
         logging.debug("Starting in encryption mode")
-        # Ask for password and Verify
 
+        # Ask for password and verify
         while True:
             p = getpass.getpass()
             if (p == getpass(prompt='Verify password:')):
@@ -56,4 +58,21 @@ def main():
         else:
             logging.debug("No web keyfile provided.") 
             password = p.encode('utf-8')   
-        encrypt(p, args.input_file)
+        encrypt(p, input_file, output_path)
+    
+    # If decryption mode
+    if args.decrypt_mode:
+        logging.debug("Starting in decryption mode")
+
+        # Set default pass to '' and then ask because pass might be blank 
+        p = ''
+        p = getpass.getpass()
+        
+        webkeyfile = web.get_webpage(args.url, **request_options)
+        if webkeyfile:
+            password = p.encode('utf-8') + webkeyfile
+        else:
+            logging.debug("No web keyfile provided.")
+            password = p.encode('utf-8')
+        decrypt(p, input_file, output_path)
+        
