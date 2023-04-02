@@ -21,10 +21,10 @@ def main():
         try:
             input_path = Path(args.input_path)
         except Exception as e:
-            print(f'Invalid input path: {e}')
+            print(f'Invalid input file: {e}')
             sys.exit(1)
-        if not input_path.exists():
-            print(f'Error: input path does not exist: {e}')
+        if not input_path.is_file():
+            print(f'Error: input file does not exist or cannot be read: {e}')
     else:
         sys.exit("Error: Input file is required. Quitting...")
 
