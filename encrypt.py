@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 import base64
 import logging
+import sys
 
 def encrypt(password, input_file, output_path):
     
@@ -20,12 +21,17 @@ def encrypt(password, input_file, output_path):
 
     # Encrypt file
     try:
-        with open(input_file, 'rb') as f_in:
-            enc_d = f.encrypt(f_in.read())
+        with input_file.open('rb') as f_in:
+            try:
+                enc_d = f.encrypt(f_in.read())
+            except Exception as e:
+                sys.exit(f'Failed to encrypt data.\n{e}')
     except:
-        print("Failed to open input file.")
+        sys.exit("Failed to open input file.\n{e}")
+
+    # Write file
     try:
-        with open(output_path, 'wb') as f_out:
+        with output_path.open('wb') as f_out:
             f_out.write(salt)
             f_out.write(enc_d)
     except Exception as e:
