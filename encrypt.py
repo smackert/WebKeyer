@@ -23,7 +23,6 @@ def encrypt(password, input_file, output_path):
         print("Failed to open input file.")
     try:
         with open(output_path, 'rb') as f_out:
-            f_out.write(len(salt)) # TODO: Either set fixed byte length for len OR remove salt nfo from header OR disable custom salt length
             f_out.write(salt)
             f_out.write(enc_d)
     except:
