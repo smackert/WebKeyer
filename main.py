@@ -1,11 +1,10 @@
 import sys
 import getpass
 import logging
-import encrypt
+from encrypt import encrypt
+from decrypt import decrypt
 import web
 from cli.parser import get_parser
-import encrypt
-import decrypt
 from pathlib import Path
 
 
