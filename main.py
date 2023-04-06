@@ -28,7 +28,7 @@ def main():
             print(f"Invalid input file: {e}")
             sys.exit(1)
         if not input_file.is_file():
-            print(f"Error: input file does not exist or cannot be read: {e}")
+            sys.exit(f"Error: Input file does not exist or cannot be read.")
     else:
         sys.exit("Error: Input file is required.")
 
