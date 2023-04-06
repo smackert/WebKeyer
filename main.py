@@ -21,7 +21,17 @@ def main():
     }
 
     # Set paths
-    input_file = args.input_file
+    if args.input_file:
+        try:
+            input_file = Path(args.input_file)
+        except Exception as e:
+            print(f"Invalid input file: {e}")
+            sys.exit(1)
+        if not input_file.is_file():
+            print(f"Error: input file does not exist or cannot be read: {e}")
+    else:
+        sys.exit("Error: Input file is required.")
+
     if args.output_path:
         try:
             output_path = Path(args.output_path)
