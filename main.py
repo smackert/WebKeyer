@@ -36,25 +36,32 @@ def main():
             print(f'Invalid output path: {e}')
             sys.exit(1)
     else:
-        logging.debug("No output path provided, defaulting to input_file.wbkr") 
-        output_path = input_file.with_suffix(input_file.suffix + '.wbkr')
+        logging.debug("No output path provided, defaulting to path of input_file.") 
+        output_path = input_file
 
     # If encryption mode
     if args.encrypt_mode:
         logging.debug("Starting in encryption mode")
 
+        # Give file WebKeyer encrypted-file suffix
+        output_path = output_path.with_suffix(input_file.suffix + '.wbkr')
+
         # Ask for password and verify
         while True:
             p = getpass.getpass()
-            if (p == getpass(prompt='Verify password:')):
+            if (p == getpass.getpass(prompt='Verify password:')):
                 break
             else:
                 print("Passwords do not match!")
          
         # Try to get the webpage if a URL is provided
-        webkeyfile = web.get_webpage(args.url, **request_options)
-        if webkeyfile:
-            password = p.encode('utf-8') + webkeyfile
+        # Skip if there is no URL provided
+        if args.url:
+            webkeyfile = web.get_webpage(args.url, **request_options)
+            if webkeyfile:
+                password = p.encode('utf-8') + webkeyfile
+            else:
+                sys.exit('A URL was provided but the webkey returned None')
         else:
             logging.debug("No web keyfile provided.") 
             password = p.encode('utf-8')   
@@ -64,15 +71,25 @@ def main():
     if args.decrypt_mode:
         logging.debug("Starting in decryption mode")
 
+        output_path = input_file.stem
+
         # Set default pass to '' and then ask because pass might be blank 
         p = ''
         p = getpass.getpass()
         
-        webkeyfile = web.get_webpage(args.url, **request_options)
-        if webkeyfile:
-            password = p.encode('utf-8') + webkeyfile
+        # Skip if there is no URL provided
+        if args.url:
+            webkeyfile = web.get_webpage(args.url, **request_options)
+            if webkeyfile:
+                password = p.encode('utf-8') + webkeyfile
+            else:
+                sys.exit('A URL was provided but the webkey returned None')
         else:
             logging.debug("No web keyfile provided.")
             password = p.encode('utf-8')
         decrypt(p, input_file, output_path)
-        
+
+
+if __name__ == "__main__":
+    # Call the main function
+    main()
