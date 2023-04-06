@@ -75,8 +75,7 @@ def main():
 
         output_path = input_file.stem
 
-        # Set default pass to '' and then ask because pass might be blank
-        p = ""
+        # Ask for pass 
         p = getpass.getpass()
 
         # Skip if there is no URL provided
