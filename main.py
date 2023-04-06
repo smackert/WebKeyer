@@ -25,8 +25,7 @@ def main():
         try:
             input_file = Path(args.input_file)
         except Exception as e:
-            print(f"Invalid input file: {e}")
-            sys.exit(1)
+            sys.exit(f"Invalid input file: {e}")
         if not input_file.is_file():
             sys.exit(f"Error: Input file does not exist or cannot be read.")
     else:
@@ -36,8 +35,7 @@ def main():
         try:
             output_path = Path(args.output_path)
         except Exception as e:
-            print(f"Invalid output path: {e}")
-            sys.exit(1)
+            sys.exit(f"Invalid output path: {e}")
     else:
         logging.debug("No output path provided, defaulting to path of input_file.")
         output_path = input_file
@@ -73,7 +71,7 @@ def main():
     if args.decrypt_mode:
         logging.debug("Starting in decryption mode")
 
-        output_path = input_file.stem
+        output_path = input_file.parent / input_file.stem
 
         # Ask for pass 
         p = getpass.getpass()
