@@ -25,7 +25,7 @@ def encrypt(password, input_file, output_path):
     except:
         print("Failed to open input file.")
     try:
-        with open(output_path, 'rb') as f_out:
+        with open(output_path, 'wb') as f_out:
             f_out.write(salt)
             f_out.write(enc_d)
     except Exception as e:
