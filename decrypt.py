@@ -1,6 +1,7 @@
 from cryptography.fernet import Fernet
 from pathlib import Path
 import hashlib
+import base64
 
 def decrypt(password, input_file, output_path):
 
@@ -9,9 +10,11 @@ def decrypt(password, input_file, output_path):
         salt = f_in.read()[:16]
 
     # Generate key 
-    key = hashlib.pbkdf2_hmac('sha256', password, salt, 100000)
+    key = hashlib.pbkdf2_hmac('sha256', password.encode(), salt, 100000)
     
     # New Fernet obj
+    # Fernet key must be 32 url-safe base64-encoded bytes.
+    key = base64.b64encode(key)
     f = Fernet(key)
 
     
@@ -27,5 +30,5 @@ def decrypt(password, input_file, output_path):
     try:
         with open(output_path, 'wb') as f_out:
             f_out.write(decrypted_data)
-    except:
-        print('Failed to write decrypted data.')
+    except Exception as e:
+        print(f'Failed to write decrypted data: {e}')
