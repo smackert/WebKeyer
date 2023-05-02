@@ -71,9 +71,10 @@ def main():
     if args.decrypt_mode:
         logging.debug("Starting in decryption mode")
 
-        output_path = input_file.parent / input_file.stem
+        if not output_path:
+            output_path = input_file.parent / input_file.stem
 
-        # Ask for pass 
+        # Ask for pass
         p = getpass.getpass()
 
         # Skip if there is no URL provided
