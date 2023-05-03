@@ -38,14 +38,16 @@ def main():
             sys.exit(f"Invalid output path: {e}")
     else:
         logging.debug("No output path provided, defaulting to path of input_file.")
-        output_path = input_file
+        output_path = None
 
     # If encryption mode
     if args.encrypt_mode:
         logging.debug("Starting in encryption mode")
 
-        # Give file WebKeyer encrypted-file suffix
-        output_path = output_path.with_suffix(input_file.suffix + ".wbkr")
+        if not output_path:
+            # Give input file WebKeyer encrypted-file suffix
+            output_path = input_file
+            output_path = output_path.with_suffix(input_file.suffix + ".wbkr")
 
         # Ask for password and verify
         while True:
