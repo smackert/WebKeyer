@@ -26,8 +26,8 @@ def encrypt(password, input_file, output_path):
                 enc_d = f.encrypt(f_in.read())
             except Exception as e:
                 sys.exit(f"Failed to encrypt data.\n{e}")
-    except:
-        sys.exit(f"Failed to open input file: {input_file}\n")
+    except Exception as e:
+        sys.exit(f"Failed to open input file: {input_file} with exception {e}\n")
 
     # Write file
     try:
